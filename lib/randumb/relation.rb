@@ -189,7 +189,7 @@ module Randumb
           ActiveSupport::Deprecation.warn "Dynamic finders will be removed in randumb 1.0 http://guides.rubyonrails.org/active_record_querying.html#dynamic-finders"
           random_weighted($1, *args)
         else
-          super
+          raise NoMethodError, "Undefined method `#{symbol}` for #{self.class}. Expected method to match `random_weighted_by_(attribute)`"
         end
       end
 
