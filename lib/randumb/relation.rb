@@ -186,11 +186,15 @@ module Randumb
     module MethodMissingMagicks
       def method_missing(symbol, *args)
         if symbol.to_s =~ /^random_weighted_by_(\w+)$/
-          ActiveSupport::Deprecation.warn "Dynamic finders will be removed in randumb 1.0 http://guides.rubyonrails.org/active_record_querying.html#dynamic-finders"
+          ActiveSupport::Deprecation.warn "Dynamic finders will be removed in randumb 1.0"
           random_weighted($1, *args)
         else
-          raise NoMethodError, "Undefined method `#{symbol}` for #{self.class}. Expected method to match `random_weighted_by_(attribute)`"
+          custom_no_method_error(symbol)
         end
+      end
+      
+      def custom_no_method_error(symbol)
+        raise NoMethodError, "The method `#{symbol}` is not defined in `#{self.class}` or is not handled by `method_missing`."
       end
 
       def respond_to?(symbol, include_private=false)
